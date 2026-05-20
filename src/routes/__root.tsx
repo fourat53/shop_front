@@ -3,6 +3,7 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import { TanStackDevtools } from "@tanstack/react-devtools"
 import { ThemeProvider } from "tanstack-theme-kit"
 import appCss from "../styles.css?url"
+import ThemeSwitch from "@/components/ThemeSwitch"
 
 export const Route = createRootRoute({
   head: () => ({
@@ -52,6 +53,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             ]}
           />
           <Scripts />
+          <ThemeSwitch className="fixed top-4 right-4" />
         </ThemeProvider>
       </body>
     </html>
