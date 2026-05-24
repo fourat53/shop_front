@@ -159,55 +159,59 @@ function UsersPage() {
             Add User
           </Button>
         </div>
-        <Table aria-label="Users Table">
-          <Table.Header>
-            <Table.Column>USER</Table.Column>
-            <Table.Column>EMAIL ADDRESS</Table.Column>
-            <Table.Column>ROLE</Table.Column>
-            <Table.Column>ACTIONS</Table.Column>
-          </Table.Header>
-          <Table.Body>
-            {users.map((u) => (
-              <Table.Row key={u.id}>
-                <Table.Cell>
-                  <div className="flex items-center gap-3">
-                    <Avatar className="size-9 bg-accent/20 text-accent" />
-                    <span className="font-semibold text-foreground">
-                      {u.firstName} {u.lastName}
-                    </span>
-                  </div>
-                </Table.Cell>
-                <Table.Cell>{u.email}</Table.Cell>
-                <Table.Cell>
-                  <span
-                    className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${u.role === "ADMIN" ? "bg-danger/10 text-danger" : u.role === "GUEST" ? "border border-border bg-surface text-muted" : "bg-success/10 text-success"}`}
-                  >
-                    {u.role}
-                  </span>
-                </Table.Cell>
-                <Table.Cell>
-                  <div className="flex items-center justify-end gap-2">
-                    <Button
-                      isIconOnly
-                      size="sm"
-                      variant="secondary"
-                      onClick={() => openModal("edit", u)}
-                    >
-                      <IconEdit className="size-4 text-muted hover:text-foreground" />
-                    </Button>
-                    <Button
-                      isIconOnly
-                      size="sm"
-                      variant="danger-soft"
-                      onClick={() => handleDelete(u.id)}
-                    >
-                      <IconTrash className="size-4" />
-                    </Button>
-                  </div>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
+        <Table>
+          <Table.ScrollContainer>
+            <Table.Content aria-label="Users Table">
+              <Table.Header>
+                <Table.Column>USER</Table.Column>
+                <Table.Column>EMAIL ADDRESS</Table.Column>
+                <Table.Column>ROLE</Table.Column>
+                <Table.Column>ACTIONS</Table.Column>
+              </Table.Header>
+              <Table.Body>
+                {users.map((u) => (
+                  <Table.Row key={u.id}>
+                    <Table.Cell>
+                      <div className="flex items-center gap-3">
+                        <Avatar className="size-9 bg-accent/20 text-accent" />
+                        <span className="font-semibold text-foreground">
+                          {u.firstName} {u.lastName}
+                        </span>
+                      </div>
+                    </Table.Cell>
+                    <Table.Cell>{u.email}</Table.Cell>
+                    <Table.Cell>
+                      <span
+                        className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${u.role === "ADMIN" ? "bg-danger/10 text-danger" : u.role === "GUEST" ? "border border-border bg-surface text-muted" : "bg-success/10 text-success"}`}
+                      >
+                        {u.role}
+                      </span>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <div className="flex items-center justify-end gap-2">
+                        <Button
+                          isIconOnly
+                          size="sm"
+                          variant="secondary"
+                          onClick={() => openModal("edit", u)}
+                        >
+                          <IconEdit className="size-4 text-muted hover:text-foreground" />
+                        </Button>
+                        <Button
+                          isIconOnly
+                          size="sm"
+                          variant="danger-soft"
+                          onClick={() => handleDelete(u.id)}
+                        >
+                          <IconTrash className="size-4" />
+                        </Button>
+                      </div>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table.Content>
+          </Table.ScrollContainer>
         </Table>
       </Card>
 

@@ -113,52 +113,56 @@ function CategoriesPage() {
           </Button>
         </div>
 
-        <Table aria-label="Categories Table">
-          <Table.Header>
-            <Table.Column>ID</Table.Column>
-            <Table.Column>CATEGORY NAME</Table.Column>
-            <Table.Column>TARGET GENDER</Table.Column>
-            <Table.Column>ACTIONS</Table.Column>
-          </Table.Header>
-          <Table.Body>
-            {categories.map((c) => (
-              <Table.Row key={c.id}>
-                <Table.Cell className="font-semibold text-muted">
-                  #{c.id}
-                </Table.Cell>
-                <Table.Cell className="font-semibold text-foreground">
-                  {c.name}
-                </Table.Cell>
-                <Table.Cell>
-                  <span
-                    className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${c.gender === "FEMALE" ? "bg-danger/10 text-danger" : "bg-accent/10 text-accent"}`}
-                  >
-                    {c.gender}
-                  </span>
-                </Table.Cell>
-                <Table.Cell>
-                  <div className="flex items-center justify-end gap-2">
-                    <Button
-                      isIconOnly
-                      size="sm"
-                      variant="secondary"
-                      onClick={() => openModal("edit", c)}
-                    >
-                      <IconEdit className="size-4 text-muted hover:text-foreground" />
-                    </Button>
-                    <Button
-                      isIconOnly
-                      size="sm"
-                      variant="danger-soft"
-                      onClick={() => handleDelete(c.id)}
-                    >
-                      <IconTrash className="size-4" />
-                    </Button>
-                  </div>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
+        <Table>
+          <Table.ScrollContainer>
+            <Table.Content aria-label="Categories Table">
+              <Table.Header>
+                <Table.Column>ID</Table.Column>
+                <Table.Column>CATEGORY NAME</Table.Column>
+                <Table.Column>TARGET GENDER</Table.Column>
+                <Table.Column>ACTIONS</Table.Column>
+              </Table.Header>
+              <Table.Body>
+                {categories.map((c) => (
+                  <Table.Row key={c.id}>
+                    <Table.Cell className="font-semibold text-muted">
+                      #{c.id}
+                    </Table.Cell>
+                    <Table.Cell className="font-semibold text-foreground">
+                      {c.name}
+                    </Table.Cell>
+                    <Table.Cell>
+                      <span
+                        className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${c.gender === "FEMALE" ? "bg-danger/10 text-danger" : "bg-accent/10 text-accent"}`}
+                      >
+                        {c.gender}
+                      </span>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <div className="flex items-center justify-end gap-2">
+                        <Button
+                          isIconOnly
+                          size="sm"
+                          variant="secondary"
+                          onClick={() => openModal("edit", c)}
+                        >
+                          <IconEdit className="size-4 text-muted hover:text-foreground" />
+                        </Button>
+                        <Button
+                          isIconOnly
+                          size="sm"
+                          variant="danger-soft"
+                          onClick={() => handleDelete(c.id)}
+                        >
+                          <IconTrash className="size-4" />
+                        </Button>
+                      </div>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table.Content>
+          </Table.ScrollContainer>
         </Table>
       </Card>
 

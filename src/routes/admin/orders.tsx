@@ -91,85 +91,89 @@ function OrdersPage() {
           />
         </div>
 
-        <Table aria-label="Orders Table">
-          <Table.Header>
-            <Table.Column>ORDER ID</Table.Column>
-            <Table.Column>CUSTOMER</Table.Column>
-            <Table.Column>DATE</Table.Column>
-            <Table.Column>TOTAL PRICE</Table.Column>
-            <Table.Column>STATUS</Table.Column>
-            <Table.Column>ACTIONS</Table.Column>
-          </Table.Header>
-          <Table.Body>
-            {orders.map((o) => (
-              <Table.Row key={o.orderId}>
-                <Table.Cell className="font-semibold text-muted">
-                  #{o.orderId}
-                </Table.Cell>
-                <Table.Cell>
-                  <div className="flex flex-col">
-                    <span className="font-semibold text-foreground">
-                      {o.user
-                        ? `${o.user.firstName} ${o.user.lastName}`
-                        : "Guest"}
-                    </span>
-                    <span className="text-xs text-muted">
-                      {o.user?.email || "No email"}
-                    </span>
-                  </div>
-                </Table.Cell>
-                <Table.Cell>{o.orderDate}</Table.Cell>
-                <Table.Cell className="font-semibold text-foreground">
-                  ${o.totalAmount}
-                </Table.Cell>
-                <Table.Cell>
-                  <Select
-                    className="w-32"
-                    // selectedKeys={[o.orderStatus]}
-                    // onChange={(e) => handleStatusChange(o.orderId, e.target.value as Order["orderStatus"])}
-                    // color={
-                    //   o.orderStatus === "DELIVERED" ? "success" :
-                    //     o.orderStatus === "PENDING" ? "warning" :
-                    //       o.orderStatus === "CANCELLED" ? "danger" : "default"
-                    // }
-                  >
-                    <Select.Popover>
-                      <ListBox>
-                        {statusOptions.map((status, index) => (
-                          <ListBox.Item
-                            id={status}
-                            key={index}
-                            textValue={status}
-                          >
-                            {status}
-                          </ListBox.Item>
-                        ))}
-                      </ListBox>
-                    </Select.Popover>
-                  </Select>
-                </Table.Cell>
-                <Table.Cell>
-                  <div className="flex items-center justify-end gap-2">
-                    <Button
-                      size="sm"
-                      variant="secondary"
-                      onClick={() => openDetails(o)}
-                    >
-                      Details
-                    </Button>
-                    <Button
-                      isIconOnly
-                      size="sm"
-                      variant="danger-soft"
-                      onClick={() => handleDelete(o.orderId)}
-                    >
-                      <IconTrash className="size-4" />
-                    </Button>
-                  </div>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
+        <Table>
+          <Table.ScrollContainer>
+            <Table.Content aria-label="Orders Table">
+              <Table.Header>
+                <Table.Column>ORDER ID</Table.Column>
+                <Table.Column>CUSTOMER</Table.Column>
+                <Table.Column>DATE</Table.Column>
+                <Table.Column>TOTAL PRICE</Table.Column>
+                <Table.Column>STATUS</Table.Column>
+                <Table.Column>ACTIONS</Table.Column>
+              </Table.Header>
+              <Table.Body>
+                {orders.map((o) => (
+                  <Table.Row key={o.orderId}>
+                    <Table.Cell className="font-semibold text-muted">
+                      #{o.orderId}
+                    </Table.Cell>
+                    <Table.Cell>
+                      <div className="flex flex-col">
+                        <span className="font-semibold text-foreground">
+                          {o.user
+                            ? `${o.user.firstName} ${o.user.lastName}`
+                            : "Guest"}
+                        </span>
+                        <span className="text-xs text-muted">
+                          {o.user?.email || "No email"}
+                        </span>
+                      </div>
+                    </Table.Cell>
+                    <Table.Cell>{o.orderDate}</Table.Cell>
+                    <Table.Cell className="font-semibold text-foreground">
+                      ${o.totalAmount}
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Select
+                        className="w-32"
+                        // selectedKeys={[o.orderStatus]}
+                        // onChange={(e) => handleStatusChange(o.orderId, e.target.value as Order["orderStatus"])}
+                        // color={
+                        //   o.orderStatus === "DELIVERED" ? "success" :
+                        //     o.orderStatus === "PENDING" ? "warning" :
+                        //       o.orderStatus === "CANCELLED" ? "danger" : "default"
+                        // }
+                      >
+                        <Select.Popover>
+                          <ListBox>
+                            {statusOptions.map((status, index) => (
+                              <ListBox.Item
+                                id={status}
+                                key={index}
+                                textValue={status}
+                              >
+                                {status}
+                              </ListBox.Item>
+                            ))}
+                          </ListBox>
+                        </Select.Popover>
+                      </Select>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <div className="flex items-center justify-end gap-2">
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          onClick={() => openDetails(o)}
+                        >
+                          Details
+                        </Button>
+                        <Button
+                          isIconOnly
+                          size="sm"
+                          variant="danger-soft"
+                          onClick={() => handleDelete(o.orderId)}
+                        >
+                          <IconTrash className="size-4" />
+                        </Button>
+                      </div>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table.Content>
+          </Table.ScrollContainer>
         </Table>
       </Card>
 

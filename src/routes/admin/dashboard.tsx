@@ -130,53 +130,54 @@ function DashboardPage() {
             </Button>
           </Link>
         </div>
-        <Table
-          aria-label="Recent Orders Table"
-          className="w-full text-left text-sm"
-        >
-          <Table.Header>
-            <Table.Column>Order ID</Table.Column>
-            <Table.Column>Customer</Table.Column>
-            <Table.Column>Date</Table.Column>
-            <Table.Column>Total</Table.Column>
-            <Table.Column>Status</Table.Column>
-          </Table.Header>
-          <Table.Body>
-            {orders.map((order) => (
-              <Table.Row
-                key={order.orderId}
-                className="border-b border-border/50 hover:bg-surface/10"
-              >
-                <Table.Cell className="py-3 font-semibold">
-                  #{order.orderId}
-                </Table.Cell>
-                <Table.Cell className="py-3">
-                  {order.user
-                    ? `${order.user.firstName} ${order.user.lastName}`
-                    : "Guest"}
-                </Table.Cell>
-                <Table.Cell className="py-3">{order.orderDate}</Table.Cell>
-                <Table.Cell className="py-3 font-semibold">
-                  ${order.totalAmount}
-                </Table.Cell>
-                <Table.Cell className="py-3 text-right">
-                  <span
-                    className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                      order.orderStatus === "DELIVERED"
-                        ? "bg-success/15 text-success"
-                        : order.orderStatus === "PENDING"
-                          ? "bg-warning/15 text-warning"
-                          : order.orderStatus === "CANCELLED"
-                            ? "bg-danger/15 text-danger"
-                            : "bg-accent/15 text-accent"
-                    }`}
+        <Table>
+          <Table.ScrollContainer>
+            <Table.Content aria-label="Recent Orders Table">
+              <Table.Header>
+                <Table.Column>Order ID</Table.Column>
+                <Table.Column>Customer</Table.Column>
+                <Table.Column>Date</Table.Column>
+                <Table.Column>Total</Table.Column>
+                <Table.Column>Status</Table.Column>
+              </Table.Header>
+              <Table.Body>
+                {orders.map((order) => (
+                  <Table.Row
+                    key={order.orderId}
+                    className="border-b border-border/50 hover:bg-surface/10"
                   >
-                    {order.orderStatus}
-                  </span>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
+                    <Table.Cell className="py-3 font-semibold">
+                      #{order.orderId}
+                    </Table.Cell>
+                    <Table.Cell className="py-3">
+                      {order.user
+                        ? `${order.user.firstName} ${order.user.lastName}`
+                        : "Guest"}
+                    </Table.Cell>
+                    <Table.Cell className="py-3">{order.orderDate}</Table.Cell>
+                    <Table.Cell className="py-3 font-semibold">
+                      ${order.totalAmount}
+                    </Table.Cell>
+                    <Table.Cell className="py-3 text-right">
+                      <span
+                        className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                          order.orderStatus === "DELIVERED"
+                            ? "bg-success/15 text-success"
+                            : order.orderStatus === "PENDING"
+                              ? "bg-warning/15 text-warning"
+                              : order.orderStatus === "CANCELLED"
+                                ? "bg-danger/15 text-danger"
+                                : "bg-accent/15 text-accent"
+                        }`}
+                      >
+                        {order.orderStatus}
+                      </span>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table.Content>
+          </Table.ScrollContainer>
         </Table>
       </Card>
 

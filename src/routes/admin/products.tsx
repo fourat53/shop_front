@@ -168,80 +168,84 @@ function ProductsPage() {
           </Button>
         </div>
 
-        <Table aria-label="Products Table">
-          <Table.Header>
-            <Table.Column>PRODUCT</Table.Column>
-            <Table.Column>BRAND</Table.Column>
-            <Table.Column>CATEGORY</Table.Column>
-            <Table.Column>PRICE</Table.Column>
-            <Table.Column>STOCK</Table.Column>
-            <Table.Column>ACTIONS</Table.Column>
-          </Table.Header>
-          <Table.Body>
-            {products.map((p) => (
-              <Table.Row key={p.id}>
-                <Table.Cell>
-                  <div className="flex items-center gap-3">
-                    {p.images && p.images.length > 0 ? (
-                      <img
-                        src={p.images[0].downloadUrl}
-                        alt={p.name}
-                        className="size-10 rounded-lg bg-surface object-cover"
-                      />
-                    ) : (
-                      <div className="flex size-10 items-center justify-center rounded-lg bg-surface font-bold text-muted">
-                        N/A
+        <Table>
+          <Table.ScrollContainer>
+            <Table.Content aria-label="Products Table">
+              <Table.Header>
+                <Table.Column>PRODUCT</Table.Column>
+                <Table.Column>BRAND</Table.Column>
+                <Table.Column>CATEGORY</Table.Column>
+                <Table.Column>PRICE</Table.Column>
+                <Table.Column>STOCK</Table.Column>
+                <Table.Column>ACTIONS</Table.Column>
+              </Table.Header>
+              <Table.Body>
+                {products.map((p) => (
+                  <Table.Row key={p.id}>
+                    <Table.Cell>
+                      <div className="flex items-center gap-3">
+                        {p.images && p.images.length > 0 ? (
+                          <img
+                            src={p.images[0].downloadUrl}
+                            alt={p.name}
+                            className="size-10 rounded-lg bg-surface object-cover"
+                          />
+                        ) : (
+                          <div className="flex size-10 items-center justify-center rounded-lg bg-surface font-bold text-muted">
+                            N/A
+                          </div>
+                        )}
+                        <div>
+                          <span className="block font-semibold text-foreground">
+                            {p.name}
+                          </span>
+                          <span className="block max-w-50 truncate text-xs text-muted">
+                            {p.description}
+                          </span>
+                        </div>
                       </div>
-                    )}
-                    <div>
-                      <span className="block font-semibold text-foreground">
-                        {p.name}
+                    </Table.Cell>
+                    <Table.Cell>{p.brand}</Table.Cell>
+                    <Table.Cell>
+                      <span className="inline-flex rounded-lg border border-border bg-surface px-2.5 py-1 text-xs font-medium">
+                        {p.category?.name || "Uncategorized"}
                       </span>
-                      <span className="block max-w-50 truncate text-xs text-muted">
-                        {p.description}
+                    </Table.Cell>
+                    <Table.Cell className="font-semibold text-foreground">
+                      ${p.price}
+                    </Table.Cell>
+                    <Table.Cell>
+                      <span
+                        className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${p.inventory < 10 ? "bg-danger/10 text-danger" : "bg-success/10 text-success"}`}
+                      >
+                        {p.inventory} units
                       </span>
-                    </div>
-                  </div>
-                </Table.Cell>
-                <Table.Cell>{p.brand}</Table.Cell>
-                <Table.Cell>
-                  <span className="inline-flex rounded-lg border border-border bg-surface px-2.5 py-1 text-xs font-medium">
-                    {p.category?.name || "Uncategorized"}
-                  </span>
-                </Table.Cell>
-                <Table.Cell className="font-semibold text-foreground">
-                  ${p.price}
-                </Table.Cell>
-                <Table.Cell>
-                  <span
-                    className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${p.inventory < 10 ? "bg-danger/10 text-danger" : "bg-success/10 text-success"}`}
-                  >
-                    {p.inventory} units
-                  </span>
-                </Table.Cell>
-                <Table.Cell>
-                  <div className="flex items-center justify-end gap-2">
-                    <Button
-                      isIconOnly
-                      size="sm"
-                      variant="secondary"
-                      onClick={() => openModal("edit", p)}
-                    >
-                      <IconEdit className="size-4 text-muted hover:text-foreground" />
-                    </Button>
-                    <Button
-                      isIconOnly
-                      size="sm"
-                      variant="danger-soft"
-                      onClick={() => handleDelete(p.id)}
-                    >
-                      <IconTrash className="size-4" />
-                    </Button>
-                  </div>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <div className="flex items-center justify-end gap-2">
+                        <Button
+                          isIconOnly
+                          size="sm"
+                          variant="secondary"
+                          onClick={() => openModal("edit", p)}
+                        >
+                          <IconEdit className="size-4 text-muted hover:text-foreground" />
+                        </Button>
+                        <Button
+                          isIconOnly
+                          size="sm"
+                          variant="danger-soft"
+                          onClick={() => handleDelete(p.id)}
+                        >
+                          <IconTrash className="size-4" />
+                        </Button>
+                      </div>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table.Content>
+          </Table.ScrollContainer>
         </Table>
       </Card>
 

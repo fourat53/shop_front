@@ -73,7 +73,6 @@ export const productsApi = {
           })
         )
       )
-      // Refetch to get updated product with images
       const refetched = await request(`/products/${createdProduct.id}`)
       return validateWithSchema(ProductSchema, refetched)
     }
