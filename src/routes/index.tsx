@@ -1,15 +1,34 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { IconCurrencyDollar } from "@tabler/icons-react"
+import { IconCurrencyDollar, IconShield } from "@tabler/icons-react"
 import { Avatar, Button, Card, CloseButton, Link } from "@heroui/react"
 
 export const Route = createFileRoute("/")({
   component: HomePage,
 })
 
-export function HomePage() {
+function HomePage() {
   return (
-    <div className="flex w-full items-center justify-center">
-      <div className="grid w-full max-w-2xl grid-cols-12 gap-4 p-4">
+    <div className="flex w-full flex-col items-center justify-center p-4">
+      {/* Premium Header */}
+      <header className="mb-4 flex w-full max-w-2xl items-center justify-between border-b border-border pb-4">
+        <div className="flex items-center gap-2">
+          <div className="flex size-8 items-center justify-center rounded-lg bg-accent font-black tracking-tighter text-accent-foreground">
+            A
+          </div>
+          <span className="text-lg font-bold tracking-tight">ACME Shop</span>
+        </div>
+        <Link href="/admin/dashboard">
+          <Button
+            className="flex items-center gap-2 bg-accent font-semibold text-accent-foreground"
+            size="sm"
+          >
+            <IconShield className="size-4" />
+            Admin Panel
+          </Button>
+        </Link>
+      </header>
+
+      <div className="grid w-full max-w-2xl grid-cols-12 gap-4">
         {/* Row 1: Large Product Card - Available Soon */}
         <Card className="col-span-12 flex h-auto min-h-38 flex-col sm:flex-row">
           <div className="relative h-35 w-full shrink-0 overflow-hidden rounded-2xl sm:h-30 sm:w-30">
@@ -170,7 +189,7 @@ export function HomePage() {
               <Button
                 className="bg-white text-black"
                 size="sm"
-                variant="tertiary"
+                variant="outline"
               >
                 Notify me
               </Button>

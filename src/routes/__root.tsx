@@ -4,6 +4,7 @@ import { TanStackDevtools } from "@tanstack/react-devtools"
 import { ThemeProvider } from "tanstack-theme-kit"
 import appCss from "../styles.css?url"
 import ThemeSwitch from "@/components/ThemeSwitch"
+import { Toast } from "@heroui/react"
 
 export const Route = createRootRoute({
   head: () => ({
@@ -37,12 +38,13 @@ export const Route = createRootRoute({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body className="bg-background text-foreground">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Toast.Provider />
           {children}
           <TanStackDevtools
             plugins={[
@@ -53,7 +55,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             ]}
           />
           <Scripts />
-          <ThemeSwitch className="fixed top-4 right-4" />
+          <ThemeSwitch className="fixed right-6 bottom-6" />
         </ThemeProvider>
       </body>
     </html>
