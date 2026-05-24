@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { request, validateWithSchema, API_BASE_URL } from "./client"
+import { request, validateWithSchema, BACK_BASE_URL } from "./client"
 import { CategorySchema } from "./categories"
 
 export const ImageSchema = z.object({
@@ -51,7 +51,7 @@ export const productsApi = {
   ): Promise<Product> {
     const payload: any = { ...productData }
     if (categoryId) {
-      payload.category = `${API_BASE_URL}/categories/${categoryId}`
+      payload.category = `${BACK_BASE_URL}/categories/${categoryId}`
     }
     const createdData = await request("/products", {
       method: "POST",
@@ -68,7 +68,7 @@ export const productsApi = {
               fileName: "product-image",
               fileType: "image/jpeg",
               downloadUrl: url,
-              product: `${API_BASE_URL}/products/${createdProduct.id}`,
+              product: `${BACK_BASE_URL}/products/${createdProduct.id}`,
             }),
           })
         )
@@ -90,7 +90,7 @@ export const productsApi = {
   ): Promise<Product> {
     const payload: any = { ...productData }
     if (categoryId) {
-      payload.category = `${API_BASE_URL}/categories/${categoryId}`
+      payload.category = `${BACK_BASE_URL}/categories/${categoryId}`
     } else if (categoryId === null) {
       payload.category = null
     }
@@ -120,7 +120,7 @@ export const productsApi = {
               fileName: "product-image",
               fileType: "image/jpeg",
               downloadUrl: url,
-              product: `${API_BASE_URL}/products/${id}`,
+              product: `${BACK_BASE_URL}/products/${id}`,
             }),
           })
         )
