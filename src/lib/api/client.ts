@@ -35,9 +35,14 @@ export function validateWithSchema<T>(
   data: unknown
 ): T {
   const result = schema.safeParse(data)
+
   if (!result.success) {
-    console.error("Zod validation failure details:", result.error.format())
-    throw new Error(`Data validation failed: ${result.error.message}`)
+    console.error("Zod validation errors:", result.error.issues)
+
+    throw new Error(
+      result.error.issues.map((issue) => issue.message).join(", ")
+    )
   }
+
   return result.data
 }

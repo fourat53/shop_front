@@ -1,11 +1,17 @@
-import { IconSearch, IconPlus, IconEdit, IconTrash } from "@tabler/icons-react"
+import {
+  IconEdit,
+  IconLoader2,
+  IconPlus,
+  IconSearch,
+  IconTrash,
+} from "@tabler/icons-react"
 import { createFileRoute } from "@tanstack/react-router"
 import { useState, useEffect } from "react"
 import { api, type User } from "@/lib/api"
+import Input from "@/components/ui/input"
 import {
   Card,
   Button,
-  Input,
   Modal,
   ListBox,
   Select,
@@ -13,30 +19,11 @@ import {
   toast,
   Table,
 } from "@heroui/react"
+import { accessRoles } from "../../../public/static"
 
 export const Route = createFileRoute("/admin/users")({
   component: UsersPage,
 })
-
-type AccessRole = {
-  id: User["role"]
-  name: string
-}
-
-const accessRoles: AccessRole[] = [
-  {
-    id: "USER",
-    name: "User",
-  },
-  {
-    id: "ADMIN",
-    name: "Admin",
-  },
-  {
-    id: "GUEST",
-    name: "Guest",
-  },
-] as const
 
 function UsersPage() {
   const [users, setUsers] = useState<User[]>([])
@@ -150,18 +137,17 @@ function UsersPage() {
             className="max-w-md"
             placeholder="Search users..."
             value={search}
+            icon={<IconSearch />}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <Button
-            className="bg-accent font-semibold text-accent-foreground"
-            onClick={() => openModal("create")}
-          >
+          <Button onClick={() => openModal("create")}>
+            <IconPlus />
             Add User
           </Button>
         </div>
         <Table>
           <Table.ScrollContainer>
-            <Table.Content aria-label="Users Table">
+            <Table.Content>
               <Table.Header>
                 <Table.Column>USER</Table.Column>
                 <Table.Column>EMAIL ADDRESS</Table.Column>
@@ -169,6 +155,7 @@ function UsersPage() {
                 <Table.Column>ACTIONS</Table.Column>
               </Table.Header>
               <Table.Body>
+                {loading && <IconLoader2 className="mx-auto animate-spin" />}
                 {users.map((u) => (
                   <Table.Row key={u.id}>
                     <Table.Cell>
@@ -216,74 +203,89 @@ function UsersPage() {
       </Card>
 
       <Modal isOpen={modalOpen} onOpenChange={setModalOpen}>
-        <Modal.Container>
-          <form onSubmit={handleSubmit}>
-            <Modal.Header>
-              {modalMode === "create"
-                ? "Register New User"
-                : "Edit User Account"}
-            </Modal.Header>
-            <Modal.Body>
-              <div className="grid grid-cols-2 gap-4">
-                <Input
-                  // label="First Name"
-                  required
-                  value={userFirst}
-                  onChange={(e) => setUserFirst(e.target.value)}
-                />
-                <Input
-                  // label="Last Name"
-                  required
-                  value={userLast}
-                  onChange={(e) => setUserLast(e.target.value)}
-                />
-                <Input
-                  // label="Email Address"
-                  type="email"
-                  required
-                  className="col-span-2"
-                  value={userEmail}
-                  onChange={(e) => setUserEmail(e.target.value)}
-                />
-                <Input
-                  // label="Password"
-                  type="password"
-                  required={modalMode === "create"}
-                  className="col-span-2"
-                  value={userPassword}
-                  onChange={(e) => setUserPassword(e.target.value)}
-                  placeholder={
-                    modalMode === "edit"
-                      ? "Leave blank to keep current password"
-                      : ""
-                  }
-                />
-                <Select
-                  className="col-span-2"
-                  isRequired
-                  // label="Access Role"
-                  // selectedKeys={[userRole]}
-                  // onChange={(e) => setUserRole(e.target.value as User["role"])}
-                >
-                  <Select.Popover>
-                    <ListBox>
-                      {accessRoles.map((role) => (
-                        <ListBox.Item key={role.id} textValue={role.id}>
-                          {role.name}
-                        </ListBox.Item>
-                      ))}
-                    </ListBox>
-                  </Select.Popover>
-                </Select>
-              </div>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button className="bg-accent text-accent-foreground">
-                {modalMode === "create" ? "Create Account" : "Save Changes"}
-              </Button>
-            </Modal.Footer>
-          </form>
-        </Modal.Container>
+        <Modal.Backdrop>
+          <Modal.Container>
+            <Modal.Dialog>
+              <form onSubmit={handleSubmit}>
+                <Modal.Header>
+                  {modalMode === "create"
+                    ? "Register New User"
+                    : "Edit User Account"}
+                </Modal.Header>
+                <Modal.Body>
+                  <div className="grid grid-cols-2 gap-4">
+                    <Input
+                      label="First Name"
+                      required
+                      value={userFirst}
+                      onChange={(e) => setUserFirst(e.target.value)}
+                    />
+                    <Input
+                      label="Last Name"
+                      required
+                      value={userLast}
+                      onChange={(e) => setUserLast(e.target.value)}
+                    />
+                    <Input
+                      label="Email Address"
+                      type="email"
+                      required
+                      className="col-span-2"
+                      value={userEmail}
+                      onChange={(e) => setUserEmail(e.target.value)}
+                    />
+                    <Input
+                      label="Password"
+                      type="password"
+                      required={modalMode === "create"}
+                      className="col-span-2"
+                      value={userPassword}
+                      onChange={(e) => setUserPassword(e.target.value)}
+                      placeholder={
+                        modalMode === "edit"
+                          ? "Leave blank to keep current password"
+                          : ""
+                      }
+                    />
+                    <Select
+                      isRequired
+                      area-label="Access Role"
+                      value={userRole}
+                      onChange={(value) => {
+                        if (!value) return
+                        setUserRole(value as User["role"])
+                      }}
+                    >
+                      <Select.Trigger>
+                        <Select.Value />
+                        <Select.Indicator />
+                      </Select.Trigger>
+
+                      <Select.Popover>
+                        <ListBox>
+                          {accessRoles.map((role) => (
+                            <ListBox.Item
+                              key={role.id}
+                              id={role.id}
+                              textValue={role.name}
+                            >
+                              {role.name}
+                            </ListBox.Item>
+                          ))}
+                        </ListBox>
+                      </Select.Popover>
+                    </Select>
+                  </div>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button className="bg-accent text-accent-foreground">
+                    {modalMode === "create" ? "Create Account" : "Save Changes"}
+                  </Button>
+                </Modal.Footer>
+              </form>
+            </Modal.Dialog>
+          </Modal.Container>
+        </Modal.Backdrop>
       </Modal>
     </>
   )

@@ -1,17 +1,11 @@
-import { IconSearch, IconPlus, IconEdit, IconTrash } from "@tabler/icons-react"
+import { IconEdit, IconLoader2, IconTrash } from "@tabler/icons-react"
 import { createFileRoute } from "@tanstack/react-router"
 import { api, type Category } from "@/lib/api"
 import { useState, useEffect } from "react"
-import {
-  Card,
-  Button,
-  Input,
-  Table,
-  Modal,
-  Select,
-  ListBox,
-  toast,
-} from "@heroui/react"
+import Input from "@/components/ui/input"
+import Select from "@/components/ui/select"
+import { Card, Button, Table, Modal, toast, IconPlus } from "@heroui/react"
+import { genders } from "../../../public/static"
 
 export const Route = createFileRoute("/admin/categories")({
   component: CategoriesPage,
@@ -26,8 +20,8 @@ function CategoriesPage() {
   const [modalMode, setModalMode] = useState<"create" | "edit">("create")
   const [editingId, setEditingId] = useState<number | null>(null)
 
-  const [catName, setCatName] = useState<string>("")
-  const [catGender, setCatGender] = useState<Category["gender"]>("MALE")
+  const [name, setName] = useState<string>("")
+  const [gender, setGender] = useState<Category["gender"]>("MALE")
 
   const fetchData = async () => {
     setLoading(true)
@@ -49,31 +43,31 @@ function CategoriesPage() {
     setModalMode(mode)
     if (mode === "edit" && item) {
       setEditingId(item.id)
-      setCatName(item.name)
-      setCatGender(item.gender)
+      setName(item.name)
+      setGender(item.gender)
     } else {
       setEditingId(null)
-      setCatName("")
-      setCatGender("MALE")
+      setName("")
+      setGender("MALE")
     }
     setModalOpen(true)
   }
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault()
-    if (!catName) {
+    if (!name) {
       toast.danger("Please enter a category name")
       return
     }
 
     try {
       if (modalMode === "create") {
-        await api.createCategory({ name: catName, gender: catGender })
+        await api.createCategory({ name: name, gender: gender })
         toast.success("Category created successfully!")
       } else if (modalMode === "edit" && editingId) {
         await api.updateCategory(editingId, {
-          name: catName,
-          gender: catGender,
+          name: name,
+          gender: gender,
         })
         toast.success("Category updated successfully!")
       }
@@ -105,17 +99,15 @@ function CategoriesPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <Button
-            className="bg-accent font-semibold text-accent-foreground"
-            onClick={() => openModal("create")}
-          >
+          <Button onClick={() => openModal("create")}>
+            <IconPlus />
             Add Category
           </Button>
         </div>
 
         <Table>
           <Table.ScrollContainer>
-            <Table.Content aria-label="Categories Table">
+            <Table.Content>
               <Table.Header>
                 <Table.Column>ID</Table.Column>
                 <Table.Column>CATEGORY NAME</Table.Column>
@@ -123,6 +115,7 @@ function CategoriesPage() {
                 <Table.Column>ACTIONS</Table.Column>
               </Table.Header>
               <Table.Body>
+                {loading && <IconLoader2 className="mx-auto animate-spin" />}
                 {categories.map((c) => (
                   <Table.Row key={c.id}>
                     <Table.Cell className="font-semibold text-muted">
@@ -169,48 +162,40 @@ function CategoriesPage() {
       <Modal isOpen={modalOpen} onOpenChange={setModalOpen}>
         <Modal.Backdrop>
           <Modal.Container>
-            <form onSubmit={handleSubmit}>
-              <Modal.Header>
-                {modalMode === "create" ? "Add Category" : "Edit Category"}
-              </Modal.Header>
-              <Modal.Body>
-                <div className="space-y-4">
-                  <Input
-                    // label="Category Name"
-                    required
-                    value={catName}
-                    onChange={(e) => setCatName(e.target.value)}
-                  />
-                  <Select
-                    isRequired
-                    // selectedKeys={[catGender]}
-                    // label="Target Gender"
-                    // onChange={(e) =>
-                    //   setCatGender(e.target.value as Category["gender"])
-                    // }
-                  >
-                    <Select.Popover>
-                      <ListBox>
-                        <ListBox.Item key="MALE" textValue="MALE">
-                          Male
-                        </ListBox.Item>
-                        <ListBox.Item key="FEMALE" textValue="FEMALE">
-                          Female
-                        </ListBox.Item>
-                      </ListBox>
-                    </Select.Popover>
-                  </Select>
-                </div>
-              </Modal.Body>
-              <Modal.Footer>
-                <Button
-                  type="submit"
-                  className="bg-accent text-accent-foreground"
-                >
-                  {modalMode === "create" ? "Create Category" : "Save Changes"}
-                </Button>
-              </Modal.Footer>
-            </form>
+            <Modal.Dialog className="sm:max-w-120">
+              <Modal.CloseTrigger />
+              <form onSubmit={handleSubmit}>
+                <Modal.Header>
+                  {modalMode === "create" ? "Add Category" : "Edit Category"}
+                </Modal.Header>
+                <Modal.Body>
+                  <div className="space-y-4">
+                    <Input
+                      label="Category Name"
+                      required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                    <Select
+                      isRequired
+                      label="Target Gender"
+                      value={gender}
+                      items={genders}
+                      onChange={(value) =>
+                        setGender(value as Category["gender"])
+                      }
+                    />
+                  </div>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button type="submit">
+                    {modalMode === "create"
+                      ? "Create Category"
+                      : "Save Changes"}
+                  </Button>
+                </Modal.Footer>
+              </form>
+            </Modal.Dialog>
           </Modal.Container>
         </Modal.Backdrop>
       </Modal>

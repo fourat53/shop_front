@@ -1,17 +1,18 @@
-import { IconSearch, IconPlus, IconEdit, IconTrash } from "@tabler/icons-react"
-import { api, type Product, type Category } from "@/lib/api"
+import { IconPlus, IconEdit, IconTrash, IconLoader2 } from "@tabler/icons-react"
+import { api, type Product, type Category, type Image } from "@/lib/api"
 import { createFileRoute } from "@tanstack/react-router"
 import { useState, useEffect } from "react"
+import Input from "@/components/ui/input"
+import TextArea from "@/components/ui/textarea"
 import {
   Card,
   Button,
-  Input,
   Table,
   Modal,
   Select,
   ListBox,
-  TextArea,
   toast,
+  IconSearch,
 } from "@heroui/react"
 
 export const Route = createFileRoute("/admin/products")({
@@ -28,14 +29,13 @@ function ProductsPage() {
   const [modalMode, setModalMode] = useState<"create" | "edit">("create")
   const [editingId, setEditingId] = useState<number | null>(null)
 
-  const [prodName, setProdName] = useState<string>("")
-  const [prodBrand, setProdBrand] = useState<string>("")
-  const [prodPrice, setProdPrice] = useState<string>("")
-  const [prodInventory, setProdInventory] = useState<string>("")
-  const [prodDesc, setProdDesc] = useState<string>("")
-  const [prodCategory, setProdCategory] = useState<string>("")
-  const [prodImages, setProdImages] = useState<string>("")
-  const [existingImages, setExistingImages] = useState<any[]>([])
+  const [name, setName] = useState<string>("")
+  const [brand, setBrand] = useState<string>("")
+  const [price, setPrice] = useState<string>("")
+  const [inventory, setInventory] = useState<string>("")
+  const [desc, setDesc] = useState<string>("")
+  const [category, setCategory] = useState<string>("")
+  const [images, setImages] = useState<Image[]>([])
 
   const fetchData = async () => {
     setLoading(true)
@@ -61,54 +61,46 @@ function ProductsPage() {
     setModalMode(mode)
     if (mode === "edit" && item) {
       setEditingId(item.id)
-      setProdName(item.name)
-      setProdBrand(item.brand)
-      setProdPrice(item.price.toString())
-      setProdInventory(item.inventory.toString())
-      setProdDesc(item.description)
-      setProdCategory(item.category?.id?.toString() || "")
-      setProdImages(item.images?.map((img) => img.downloadUrl).join(", ") || "")
-      setExistingImages(item.images || [])
+      setName(item.name)
+      setBrand(item.brand)
+      setPrice(item.price.toString())
+      setInventory(item.inventory.toString())
+      setDesc(item.description)
+      setCategory(item.category?.id?.toString() || "")
+      setImages(item.images || [])
     } else {
       setEditingId(null)
-      setProdName("")
-      setProdBrand("")
-      setProdPrice("")
-      setProdInventory("")
-      setProdDesc("")
-      setProdCategory("")
-      setProdImages("")
-      setExistingImages([])
+      setName("")
+      setBrand("")
+      setPrice("")
+      setInventory("")
+      setDesc("")
+      setCategory("")
+      setImages([])
     }
     setModalOpen(true)
   }
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault()
-    if (!prodName || !prodBrand || !prodPrice || !prodInventory || !prodDesc) {
+    if (!name || !brand || !price || !inventory || !desc) {
       toast.danger("Please fill in all required fields")
       return
     }
 
     try {
-      const priceNum = parseFloat(prodPrice)
-      const invNum = parseInt(prodInventory)
-      const catId = prodCategory ? parseInt(prodCategory) : undefined
-      const imageUrls = prodImages
-        ? prodImages
-            .split(",")
-            .map((s) => s.trim())
-            .filter((s) => s.length > 0)
-        : []
-
+      const priceNum = parseFloat(price)
+      const invNum = parseInt(inventory)
+      const catId = category ? parseInt(category) : undefined
+      const imageUrls = images.map((img) => img.downloadUrl)
       if (modalMode === "create") {
         await api.createProduct(
           {
-            name: prodName,
-            brand: prodBrand,
+            name: name,
+            brand: brand,
             price: priceNum,
             inventory: invNum,
-            description: prodDesc,
+            description: desc,
           },
           catId,
           imageUrls
@@ -118,15 +110,15 @@ function ProductsPage() {
         await api.updateProduct(
           editingId,
           {
-            name: prodName,
-            brand: prodBrand,
+            name: name,
+            brand: brand,
             price: priceNum,
             inventory: invNum,
-            description: prodDesc,
+            description: desc,
           },
           catId,
           imageUrls,
-          existingImages
+          images
         )
         toast.success("Product updated successfully!")
       }
@@ -155,15 +147,15 @@ function ProductsPage() {
           <Input
             className="max-w-md"
             placeholder="Search products..."
-            // startContent={<IconSearch className="size-4 text-muted" />}
+            icon={<IconSearch />}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
           <Button
             className="bg-accent font-semibold text-accent-foreground"
-            // startContent={<IconPlus className="size-4" />}
             onClick={() => openModal("create")}
           >
+            <IconPlus />
             Add Product
           </Button>
         </div>
@@ -180,6 +172,7 @@ function ProductsPage() {
                 <Table.Column>ACTIONS</Table.Column>
               </Table.Header>
               <Table.Body>
+                {loading && <IconLoader2 className="mx-auto animate-spin" />}
                 {products.map((p) => (
                   <Table.Row key={p.id}>
                     <Table.Cell>
@@ -250,86 +243,118 @@ function ProductsPage() {
       </Card>
 
       <Modal isOpen={modalOpen} onOpenChange={setModalOpen}>
-        <Modal.Container>
-          <Modal.Body>
-            <form onSubmit={handleSubmit}>
-              <Modal.Header>
-                {modalMode === "create" ? "Add New Product" : "Edit Product"}
-              </Modal.Header>
+        <Modal.Backdrop>
+          <Modal.Container>
+            <Modal.Dialog>
               <Modal.Body>
-                <div className="grid grid-cols-2 gap-4">
-                  <Input
-                    // label="Product Name"
-                    required
-                    value={prodName}
-                    onChange={(e) => setProdName(e.target.value)}
-                  />
-                  <Input
-                    // label="Brand"
-                    required
-                    value={prodBrand}
-                    onChange={(e) => setProdBrand(e.target.value)}
-                  />
-                  <Input
-                    // label="Price ($)"
-                    type="number"
-                    step="0.01"
-                    required
-                    value={prodPrice}
-                    onChange={(e) => setProdPrice(e.target.value)}
-                  />
-                  <Input
-                    // label="Stock Inventory"
-                    type="number"
-                    required
-                    value={prodInventory}
-                    onChange={(e) => setProdInventory(e.target.value)}
-                  />
+                <form onSubmit={handleSubmit}>
+                  <Modal.Header>
+                    {modalMode === "create"
+                      ? "Add New Product"
+                      : "Edit Product"}
+                  </Modal.Header>
+                  <Modal.Body>
+                    <div className="grid grid-cols-2 gap-4">
+                      <Input
+                        label="Product name"
+                        required
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                      />
+                      <Input
+                        label="brand"
+                        required
+                        value={brand}
+                        onChange={(e) => setBrand(e.target.value)}
+                      />
+                      <Input
+                        label="price (TND)"
+                        type="number"
+                        step="0.01"
+                        required
+                        value={price}
+                        onChange={(e) => setPrice(e.target.value)}
+                      />
+                      <Input
+                        label="Stock inventory"
+                        type="number"
+                        required
+                        value={inventory}
+                        onChange={(e) => setInventory(e.target.value)}
+                      />
 
-                  <Select
-                    className="col-span-2"
-                    // label="Category"
-                    // selectedKeys={prodCategory ? [prodCategory] : []}
-                    // onChange={(e) => setProdCategory(e.target.value)}
-                  >
-                    <ListBox>
-                      {categories.map((c) => (
-                        <ListBox.Item
-                          key={c.id.toString()}
-                          textValue={c.id.toString()}
-                        >
-                          {c.name}
-                        </ListBox.Item>
-                      ))}
-                    </ListBox>
-                  </Select>
+                      <Select
+                        value={category}
+                        onChange={(value) => {
+                          if (!value) return
+                          setCategory(String(value))
+                        }}
+                      >
+                        <Select.Trigger>
+                          <Select.Value />
+                          <Select.Indicator />
+                        </Select.Trigger>
 
-                  <TextArea
-                    // label="Image URLs (comma separated)"
-                    className="col-span-2"
-                    value={prodImages}
-                    onChange={(e) => setProdImages(e.target.value)}
-                  />
-                  <TextArea
-                    // label="Description"
-                    className="col-span-2"
-                    required
-                    value={prodDesc}
-                    onChange={(e) => setProdDesc(e.target.value)}
-                  />
-                </div>
+                        <Select.Popover>
+                          <ListBox>
+                            {categories.map((c) => (
+                              <ListBox.Item
+                                key={c.id}
+                                id={c.id.toString()}
+                                textValue={c.name}
+                              >
+                                {c.name}
+                              </ListBox.Item>
+                            ))}
+                          </ListBox>
+                        </Select.Popover>
+                      </Select>
+
+                      {images && (
+                        <div className="flex flex-wrap items-center gap-1">
+                          {images.map((img, i) => (
+                            <img
+                              key={i}
+                              src={img.downloadUrl}
+                              alt={img.fileName}
+                              className="size-10 rounded-lg bg-surface object-cover"
+                            />
+                          ))}
+                          <Button
+                            className="size-10 border"
+                            type="button"
+                            variant="secondary"
+                            onClick={() => {}}
+                          >
+                            <IconPlus className="size-6" />
+                          </Button>
+                        </div>
+                      )}
+
+                      <TextArea
+                        label="Description"
+                        className="col-span-2"
+                        required
+                        value={desc}
+                        onChange={(e) => setDesc(e.target.value)}
+                      />
+                    </div>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button
+                      type="submit"
+                      className="bg-accent text-accent-foreground"
+                    >
+                      {modalMode === "create"
+                        ? "Create Product"
+                        : "Save Changes"}
+                    </Button>
+                  </Modal.Footer>
+                </form>
               </Modal.Body>
-              <Modal.Footer>
-                <Button
-                  type="submit"
-                  className="bg-accent text-accent-foreground"
-                >
-                  {modalMode === "create" ? "Create Product" : "Save Changes"}
-                </Button>
-              </Modal.Footer>
-            </form>
-          </Modal.Body>
-        </Modal.Container>
+            </Modal.Dialog>
+          </Modal.Container>
+        </Modal.Backdrop>
       </Modal>
     </>
   )
