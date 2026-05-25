@@ -19,7 +19,7 @@ function AdminLayout() {
     sidebarItems[0]
 
   return (
-    <div className="flex min-h-screen bg-background text-foreground transition-colors duration-200">
+    <div className="relative flex min-h-screen bg-background text-foreground transition-colors duration-200">
       {/* Sidebar */}
       <Sidebar />
 

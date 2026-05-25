@@ -1,6 +1,11 @@
 import { z } from "zod"
 
-export const BACK_BASE_URL = process.env.BACK_BASE_URL || ""
+// Vite exposes env vars prefixed with VITE_ via `import.meta.env` in the browser.
+// Use that first, then fall back to process.env for Node-based environments.
+export const BACK_BASE_URL =
+  (import.meta.env.VITE_BACK_BASE_URL as string) ||
+  process.env.BACK_BASE_URL ||
+  ""
 
 export async function request<T>(
   path: string,

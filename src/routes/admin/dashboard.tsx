@@ -8,6 +8,7 @@ import {
   IconShoppingCart,
   IconUsers,
   IconCheck,
+  IconLoader2,
 } from "@tabler/icons-react"
 
 export const Route = createFileRoute("/admin/dashboard")({
@@ -50,20 +51,17 @@ function DashboardPage() {
   if (loading) {
     return (
       <div className="flex h-64 w-full flex-col items-center justify-center gap-3">
-        <div className="size-10 animate-spin rounded-full border-4 border-accent border-t-transparent"></div>
-        <span className="text-sm font-semibold text-muted">
-          Loading dashboard...
-        </span>
+        <IconLoader2 className="size-9 animate-spin" />
       </div>
     )
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      <Card className="border border-border p-6">
+    <div className="grid h-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <Card className="flex h-34 flex-col justify-around border border-border p-6">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs font-semibold tracking-wider text-muted uppercase">
+            <p className="font-semibold tracking-wider text-muted uppercase">
               Total Revenue
             </p>
             <h3 className="mt-1 text-2xl font-bold">
@@ -73,55 +71,51 @@ function DashboardPage() {
               })}
             </h3>
           </div>
-          <div className="flex size-12 items-center justify-center rounded-2xl bg-success/10 text-success">
-            <IconTrendingUp className="size-6" />
+          <div className="flex size-14 items-center justify-center rounded-2xl bg-success/10 text-success">
+            <IconTrendingUp className="size-7" />
           </div>
         </div>
       </Card>
-
-      <Card className="border border-border p-6">
+      <Card className="flex h-34 flex-col justify-around border border-border p-6">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs font-semibold tracking-wider text-muted uppercase">
+            <p className="font-semibold tracking-wider text-muted uppercase">
               Products
             </p>
             <h3 className="mt-1 text-2xl font-bold">{products.length}</h3>
           </div>
-          <div className="flex size-12 items-center justify-center rounded-2xl bg-accent/10 text-accent">
-            <IconPackage className="size-6" />
+          <div className="flex size-14 items-center justify-center rounded-2xl bg-accent/10 text-accent">
+            <IconPackage className="size-7" />
           </div>
         </div>
       </Card>
-
-      <Card className="border border-border p-6">
+      <Card className="flex h-34 flex-col justify-around border border-border p-6">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs font-semibold tracking-wider text-muted uppercase">
+            <p className="font-semibold tracking-wider text-muted uppercase">
               Pending Orders
             </p>
             <h3 className="mt-1 text-2xl font-bold">{pendingOrders}</h3>
           </div>
-          <div className="flex size-12 items-center justify-center rounded-2xl bg-warning/10 text-warning">
-            <IconShoppingCart className="size-6" />
+          <div className="flex size-14 items-center justify-center rounded-2xl bg-warning/10 text-warning">
+            <IconShoppingCart className="size-7" />
           </div>
         </div>
       </Card>
-
-      <Card className="border border-border p-6">
+      <Card className="flex h-34 flex-col justify-around border border-border p-6">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs font-semibold tracking-wider text-muted uppercase">
+            <p className="font-semibold tracking-wider text-muted uppercase">
               Registered Users
             </p>
             <h3 className="mt-1 text-2xl font-bold">{users.length}</h3>
           </div>
-          <div className="bg-info/10 flex size-12 items-center justify-center rounded-2xl text-accent">
-            <IconUsers className="size-6" />
+          <div className="flex size-14 items-center justify-center rounded-2xl bg-accent/20 text-accent">
+            <IconUsers className="size-7" />
           </div>
         </div>
       </Card>
-
-      <Card className="border border-border p-6 lg:col-span-2">
+      <Card className="h-146 border border-border p-6 lg:col-span-2">
         <div className="mb-4 flex items-center justify-between">
           <h4 className="text-lg font-bold">Recent Customer Orders</h4>
           <Link to="/admin/orders">
@@ -180,8 +174,7 @@ function DashboardPage() {
           </Table.ScrollContainer>
         </Table>
       </Card>
-
-      <Card className="border border-border p-6 lg:col-span-2">
+      <Card className="h-146 border border-border p-6 lg:col-span-2">
         <h4 className="mb-4 text-lg font-bold">Inventory Alerts</h4>
         <div className="space-y-4">
           {products

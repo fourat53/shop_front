@@ -131,7 +131,7 @@ function UsersPage() {
 
   return (
     <>
-      <Card className="border border-border p-6">
+      <Card className="h-full border border-border p-6">
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <Input
             className="max-w-md"
@@ -147,7 +147,7 @@ function UsersPage() {
         </div>
         <Table>
           <Table.ScrollContainer>
-            <Table.Content>
+            <Table.Content aria-label="Users Table">
               <Table.Header>
                 <Table.Column>USER</Table.Column>
                 <Table.Column>EMAIL ADDRESS</Table.Column>
@@ -155,7 +155,6 @@ function UsersPage() {
                 <Table.Column>ACTIONS</Table.Column>
               </Table.Header>
               <Table.Body>
-                {loading && <IconLoader2 className="mx-auto animate-spin" />}
                 {users.map((u) => (
                   <Table.Row key={u.id}>
                     <Table.Cell>
@@ -200,6 +199,9 @@ function UsersPage() {
             </Table.Content>
           </Table.ScrollContainer>
         </Table>
+        {loading && (
+          <IconLoader2 className="mx-auto mt-4 size-8 animate-spin text-accent" />
+        )}
       </Card>
 
       <Modal isOpen={modalOpen} onOpenChange={setModalOpen}>
@@ -249,7 +251,7 @@ function UsersPage() {
                     />
                     <Select
                       isRequired
-                      area-label="Access Role"
+                      aria-label="Access Role"
                       value={userRole}
                       onChange={(value) => {
                         if (!value) return

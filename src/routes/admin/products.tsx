@@ -142,7 +142,7 @@ function ProductsPage() {
 
   return (
     <>
-      <Card className="border border-border p-6">
+      <Card className="h-full border border-border p-6">
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <Input
             className="max-w-md"
@@ -172,7 +172,6 @@ function ProductsPage() {
                 <Table.Column>ACTIONS</Table.Column>
               </Table.Header>
               <Table.Body>
-                {loading && <IconLoader2 className="mx-auto animate-spin" />}
                 {products.map((p) => (
                   <Table.Row key={p.id}>
                     <Table.Cell>
@@ -240,6 +239,9 @@ function ProductsPage() {
             </Table.Content>
           </Table.ScrollContainer>
         </Table>
+        {loading && (
+          <IconLoader2 className="mx-auto mt-4 size-8 animate-spin text-accent" />
+        )}
       </Card>
 
       <Modal isOpen={modalOpen} onOpenChange={setModalOpen}>

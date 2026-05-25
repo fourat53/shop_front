@@ -10,19 +10,17 @@ function HomePage() {
   return (
     <div className="flex w-full flex-col items-center justify-center p-4">
       {/* Premium Header */}
-      <header className="flex w-full max-w-2xl items-center justify-between border-b border-border pb-4 mb-4">
+      <header className="mb-4 flex w-full max-w-2xl items-center justify-between border-b border-border pb-4">
         <div className="flex items-center gap-2">
-          <div className="flex size-8 items-center justify-center rounded-lg bg-accent text-accent-foreground font-black tracking-tighter">
+          <div className="flex size-8 items-center justify-center rounded-lg bg-accent font-black tracking-tighter text-accent-foreground">
             A
           </div>
           <span className="text-lg font-bold tracking-tight">ACME Shop</span>
         </div>
-        <a href="/admin">
-          <Button className="bg-accent text-accent-foreground font-semibold flex items-center gap-2" size="sm">
-            <IconShield className="size-4" />
-            Admin Panel
-          </Button>
-        </a>
+        <Link href="/admin/dashboard">
+          <IconShield className="size-4" />
+          Admin Panel
+        </Link>
       </header>
 
       <div className="grid w-full max-w-2xl grid-cols-12 gap-4">

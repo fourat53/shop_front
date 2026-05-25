@@ -10,7 +10,7 @@ export default function TextTextArea({ label, icon, ...props }: TextAreaProps) {
 
   return (
     <div className="relative">
-      {label && <Label className="mb-1 font-medium">{label}</Label>}
+      {label && <Label className="mb-1 font-semibold">{label}</Label>}
       {Icon && icon}
       <TextArea className="pl-10" {...props} />
     </div>
