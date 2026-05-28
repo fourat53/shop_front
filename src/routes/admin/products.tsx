@@ -1,19 +1,17 @@
-import { IconPlus, IconEdit, IconTrash, IconLoader2 } from "@tabler/icons-react"
 import { api, type Product, type Category, type Image } from "@/lib/api"
+import { Card, Button, Table, Modal, toast } from "@heroui/react"
 import { createFileRoute } from "@tanstack/react-router"
+import TextArea from "@/components/ui/textarea"
 import { useState, useEffect } from "react"
 import Input from "@/components/ui/input"
-import TextArea from "@/components/ui/textarea"
+import Select from "@/components/ui/select"
 import {
-  Card,
-  Button,
-  Table,
-  Modal,
-  Select,
-  ListBox,
-  toast,
+  IconPlus,
+  IconEdit,
+  IconTrash,
+  IconLoader2,
   IconSearch,
-} from "@heroui/react"
+} from "@tabler/icons-react"
 
 export const Route = createFileRoute("/admin/products")({
   component: ProductsPage,
@@ -145,16 +143,13 @@ function ProductsPage() {
       <Card className="h-full border border-border p-6">
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <Input
-            className="max-w-md"
+            icon={IconSearch}
+            className="w-full max-w-sm"
             placeholder="Search products..."
-            icon={<IconSearch />}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <Button
-            className="bg-accent font-semibold text-accent-foreground"
-            onClick={() => openModal("create")}
-          >
+          <Button className="font-semibold" onClick={() => openModal("create")}>
             <IconPlus />
             Add Product
           </Button>
@@ -169,7 +164,7 @@ function ProductsPage() {
                 <Table.Column>CATEGORY</Table.Column>
                 <Table.Column>PRICE</Table.Column>
                 <Table.Column>STOCK</Table.Column>
-                <Table.Column>ACTIONS</Table.Column>
+                <Table.Column className="pr-7 text-right">ACTIONS</Table.Column>
               </Table.Header>
               <Table.Body>
                 {products.map((p) => (
@@ -216,9 +211,9 @@ function ProductsPage() {
                     <Table.Cell>
                       <div className="flex items-center justify-end gap-2">
                         <Button
+                          variant="secondary"
                           isIconOnly
                           size="sm"
-                          variant="secondary"
                           onClick={() => openModal("edit", p)}
                         >
                           <IconEdit className="size-4 text-muted hover:text-foreground" />
@@ -248,24 +243,22 @@ function ProductsPage() {
         <Modal.Backdrop>
           <Modal.Container>
             <Modal.Dialog>
+              <Modal.Header>
+                {modalMode === "create" ? "Add New Product" : "Edit Product"}
+              </Modal.Header>
               <Modal.Body>
                 <form onSubmit={handleSubmit}>
-                  <Modal.Header>
-                    {modalMode === "create"
-                      ? "Add New Product"
-                      : "Edit Product"}
-                  </Modal.Header>
                   <Modal.Body>
                     <div className="grid grid-cols-2 gap-4">
                       <Input
                         label="Product name"
-                        required
+                        isRequired
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                       />
                       <Input
                         label="brand"
-                        required
+                        isRequired
                         value={brand}
                         onChange={(e) => setBrand(e.target.value)}
                       />
@@ -273,44 +266,30 @@ function ProductsPage() {
                         label="price (TND)"
                         type="number"
                         step="0.01"
-                        required
+                        isRequired
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
                       />
                       <Input
                         label="Stock inventory"
                         type="number"
-                        required
+                        isRequired
                         value={inventory}
                         onChange={(e) => setInventory(e.target.value)}
                       />
 
                       <Select
+                        label="Category"
                         value={category}
+                        items={categories.map((c) => ({
+                          id: String(c.id),
+                          value: c.name + " for " + c.gender.toLowerCase(),
+                        }))}
                         onChange={(value) => {
                           if (!value) return
                           setCategory(String(value))
                         }}
-                      >
-                        <Select.Trigger>
-                          <Select.Value />
-                          <Select.Indicator />
-                        </Select.Trigger>
-
-                        <Select.Popover>
-                          <ListBox>
-                            {categories.map((c) => (
-                              <ListBox.Item
-                                key={c.id}
-                                id={c.id.toString()}
-                                textValue={c.name}
-                              >
-                                {c.name}
-                              </ListBox.Item>
-                            ))}
-                          </ListBox>
-                        </Select.Popover>
-                      </Select>
+                      />
 
                       {images && (
                         <div className="flex flex-wrap items-center gap-1">
@@ -322,12 +301,7 @@ function ProductsPage() {
                               className="size-10 rounded-lg bg-surface object-cover"
                             />
                           ))}
-                          <Button
-                            className="size-10 border"
-                            type="button"
-                            variant="secondary"
-                            onClick={() => {}}
-                          >
+                          <Button className="size-10 border" type="button">
                             <IconPlus className="size-6" />
                           </Button>
                         </div>
@@ -336,7 +310,7 @@ function ProductsPage() {
                       <TextArea
                         label="Description"
                         className="col-span-2"
-                        required
+                        isRequired
                         value={desc}
                         onChange={(e) => setDesc(e.target.value)}
                       />

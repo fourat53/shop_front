@@ -1,4 +1,4 @@
-import { IconLoader2, IconTrash } from "@tabler/icons-react"
+import { IconLoader2, IconSearch, IconTrash } from "@tabler/icons-react"
 import { createFileRoute } from "@tanstack/react-router"
 import { useState, useEffect } from "react"
 import { api, type Order } from "@/lib/api"
@@ -14,6 +14,7 @@ import {
   toast,
 } from "@heroui/react"
 import clsx from "clsx"
+import { STATUS_OPTIONS } from "../../../data/static"
 
 export const Route = createFileRoute("/admin/orders")({
   component: OrdersPage,
@@ -72,20 +73,13 @@ function OrdersPage() {
     setDetailModalOpen(true)
   }
 
-  const statusOptions = [
-    "PENDING",
-    "PROCESSING",
-    "SHIPPED",
-    "DELIVERED",
-    "CANCELLED",
-  ]
-
   return (
     <>
       <Card className="h-full border border-border p-6">
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <Input
-            className="max-w-md"
+            icon={IconSearch}
+            className="w-full max-w-sm"
             placeholder="Search orders..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -101,7 +95,7 @@ function OrdersPage() {
                 <Table.Column>DATE</Table.Column>
                 <Table.Column>TOTAL PRICE</Table.Column>
                 <Table.Column>STATUS</Table.Column>
-                <Table.Column>ACTIONS</Table.Column>
+                <Table.Column className="pr-7 text-right">ACTIONS</Table.Column>
               </Table.Header>
               <Table.Body>
                 {orders.map((o) => (
@@ -149,7 +143,7 @@ function OrdersPage() {
 
                         <Select.Popover>
                           <ListBox>
-                            {statusOptions.map((status) => (
+                            {STATUS_OPTIONS.map((status) => (
                               <ListBox.Item
                                 key={status}
                                 id={status}
@@ -164,11 +158,7 @@ function OrdersPage() {
                     </Table.Cell>
                     <Table.Cell>
                       <div className="flex items-center justify-end gap-2">
-                        <Button
-                          size="sm"
-                          variant="secondary"
-                          onClick={() => openDetails(o)}
-                        >
+                        <Button size="sm" onClick={() => openDetails(o)}>
                           Details
                         </Button>
                         <Button

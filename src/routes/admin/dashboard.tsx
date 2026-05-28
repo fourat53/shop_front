@@ -57,8 +57,8 @@ function DashboardPage() {
   }
 
   return (
-    <div className="grid h-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      <Card className="flex h-34 flex-col justify-around border border-border p-6">
+    <div className="grid h-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-20">
+      <Card className="col-span-5 flex h-34 flex-col justify-around border border-border p-6">
         <div className="flex items-center justify-between">
           <div>
             <p className="font-semibold tracking-wider text-muted uppercase">
@@ -76,7 +76,7 @@ function DashboardPage() {
           </div>
         </div>
       </Card>
-      <Card className="flex h-34 flex-col justify-around border border-border p-6">
+      <Card className="col-span-5 flex h-34 flex-col justify-around border border-border p-6">
         <div className="flex items-center justify-between">
           <div>
             <p className="font-semibold tracking-wider text-muted uppercase">
@@ -89,7 +89,7 @@ function DashboardPage() {
           </div>
         </div>
       </Card>
-      <Card className="flex h-34 flex-col justify-around border border-border p-6">
+      <Card className="col-span-5 flex h-34 flex-col justify-around border border-border p-6">
         <div className="flex items-center justify-between">
           <div>
             <p className="font-semibold tracking-wider text-muted uppercase">
@@ -102,7 +102,7 @@ function DashboardPage() {
           </div>
         </div>
       </Card>
-      <Card className="flex h-34 flex-col justify-around border border-border p-6">
+      <Card className="col-span-5 flex h-34 flex-col justify-around border border-border p-6">
         <div className="flex items-center justify-between">
           <div>
             <p className="font-semibold tracking-wider text-muted uppercase">
@@ -115,7 +115,7 @@ function DashboardPage() {
           </div>
         </div>
       </Card>
-      <Card className="h-146 border border-border p-6 lg:col-span-2">
+      <Card className="h-146 border border-border p-6 lg:col-span-13">
         <div className="mb-4 flex items-center justify-between">
           <h4 className="text-lg font-bold">Recent Customer Orders</h4>
           <Link to="/admin/orders">
@@ -174,7 +174,7 @@ function DashboardPage() {
           </Table.ScrollContainer>
         </Table>
       </Card>
-      <Card className="h-146 border border-border p-6 lg:col-span-2">
+      <Card className="h-146 border border-border p-6 lg:col-span-7">
         <h4 className="mb-4 text-lg font-bold">Inventory Alerts</h4>
         <div className="space-y-4">
           {products

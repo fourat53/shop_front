@@ -6,12 +6,12 @@ type AccessRole = {
   name: string
 }
 
-export const genders: SelectItem[] = [
+const GENDERS: SelectItem[] = [
   { id: "MALE", value: "Male" },
   { id: "FEMALE", value: "Female" },
 ] as const
 
-export const accessRoles: AccessRole[] = [
+const ACCESS_ROLES: AccessRole[] = [
   {
     id: "USER",
     name: "User",
@@ -25,3 +25,13 @@ export const accessRoles: AccessRole[] = [
     name: "Guest",
   },
 ] as const
+
+const STATUS_OPTIONS: string[] = [
+  "PENDING",
+  "PROCESSING",
+  "SHIPPED",
+  "DELIVERED",
+  "CANCELLED",
+]
+
+export { ACCESS_ROLES, GENDERS, STATUS_OPTIONS }

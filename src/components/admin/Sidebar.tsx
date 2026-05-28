@@ -8,6 +8,7 @@ import {
   IconLayoutDashboard,
   IconArrowLeft,
 } from "@tabler/icons-react"
+import ThemeSwitch from "../ThemeSwitch"
 
 interface SidebarItem {
   id: string
@@ -42,51 +43,59 @@ export const sidebarItems: SidebarItem[] = [
     label: "Orders",
     icon: IconShoppingCart,
   },
+
+  {
+    id: "home",
+    path: "/",
+    label: "Store",
+    icon: IconArrowLeft,
+  },
 ] as const
 
-export function Sidebar() {
+function SidebarItem({ item }: { item: SidebarItem }) {
   const routerState = useRouterState()
   const currentPath = routerState.location.pathname
 
+  const Icon = item.icon
+  const active = currentPath.startsWith(item.path) && item.path !== "/"
+  return (
+    <Link
+      key={item.id}
+      to={item.path}
+      className={cn(
+        "flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold transition-all hover:opacity-80",
+        {
+          "bg-accent text-accent-foreground": active,
+          "text-muted hover:bg-accent/15 hover:text-foreground dark:hover:bg-surface":
+            !active,
+        }
+      )}
+    >
+      <Icon className="size-5" />
+      {item.label}
+    </Link>
+  )
+}
+
+export function Sidebar() {
   return (
     <aside className="hidden w-64 shrink-0 border-r border-border bg-surface/50 backdrop-blur-md md:flex md:flex-col">
-      <div className="flex h-16 items-center gap-2 border-b border-border px-6">
-        <div className="flex size-8 items-center justify-center rounded-lg bg-accent font-black tracking-tighter text-accent-foreground">
+      <div className="flex h-16 items-center gap-2 px-6">
+        <div className="flex size-8 items-center justify-center rounded-full bg-accent font-black tracking-tighter text-accent-foreground">
           SF
         </div>
         <span className="text-lg font-bold tracking-tight">Shopo Floor</span>
       </div>
+      <div className="mx-3 border-b border-border" />
       <nav className="flex-1 space-y-2 p-3">
-        {sidebarItems.map((item) => {
-          const Icon = item.icon
-          const active = currentPath.startsWith(item.path)
-          return (
-            <Link
-              key={item.id}
-              to={item.path}
-              className={cn(
-                "flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold transition-all hover:opacity-80",
-                {
-                  "bg-accent text-accent-foreground": active,
-                  "text-muted hover:bg-background/60 hover:text-foreground":
-                    !active,
-                }
-              )}
-            >
-              <Icon className="size-5" />
-              {item.label}
-            </Link>
-          )
+        {sidebarItems.slice(0, -1).map((item) => {
+          return <SidebarItem key={item.id} item={item} />
         })}
       </nav>
-      <div className="border-t border-border p-4">
-        <Link
-          to="/"
-          className="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium text-muted transition-all hover:bg-surface hover:text-foreground"
-        >
-          <IconArrowLeft className="size-5" />
-          Back to Store
-        </Link>
+      <div className="mx-3 border-b border-border" />
+      <div className="flex items-center justify-between gap-2 p-3.5">
+        <SidebarItem item={sidebarItems[sidebarItems.length - 1]} />
+        <ThemeSwitch />
       </div>
     </aside>
   )

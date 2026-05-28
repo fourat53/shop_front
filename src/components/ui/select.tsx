@@ -1,4 +1,4 @@
-import { Input, Label, ListBox, Select } from "@heroui/react"
+import { Input, Label, ListBox, Select as HeroSelect } from "@heroui/react"
 import { useMemo, useState } from "react"
 
 export type SelectItem = {
@@ -7,22 +7,24 @@ export type SelectItem = {
 }
 
 type CustomSelectProps = Omit<
-  React.ComponentProps<typeof Select>,
-  "children" | "value" | "onChange" | "items"
+  React.ComponentProps<typeof HeroSelect>,
+  "children" | "value" | "onChange" | "items" | "variant"
 > & {
   label?: string
   items: SelectItem[]
   value?: string
   onChange?: (value: string) => void
   search?: boolean
+  variant?: "primary" | "secondary"
 }
 
-export default function CustomSelect({
+export default function Select({
+  variant = "secondary",
+  search = false,
   label,
   items,
   value,
   onChange,
-  search = false,
   ...props
 }: CustomSelectProps) {
   const [searchValue, setSearchValue] = useState<string>("")
@@ -36,22 +38,24 @@ export default function CustomSelect({
   }, [items, searchValue])
 
   return (
-    <Select
+    <HeroSelect
       value={value}
+      variant={variant}
       onChange={(value) => {
         onChange?.(String(value))
       }}
       {...props}
     >
-      {label && <Label>{label}</Label>}
-      <Select.Trigger>
-        <Select.Value />
-        <Select.Indicator />
-      </Select.Trigger>
+      {label && <Label className="mb-1 font-semibold">{label}</Label>}
+      <HeroSelect.Trigger>
+        <HeroSelect.Value />
+        <HeroSelect.Indicator />
+      </HeroSelect.Trigger>
 
-      <Select.Popover>
+      <HeroSelect.Popover>
         {search && (
           <Input
+            variant={variant}
             placeholder="Search..."
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
@@ -67,7 +71,7 @@ export default function CustomSelect({
             </ListBox.Item>
           ))}
         </ListBox>
-      </Select.Popover>
-    </Select>
+      </HeroSelect.Popover>
+    </HeroSelect>
   )
 }

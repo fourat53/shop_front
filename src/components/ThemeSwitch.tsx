@@ -3,6 +3,7 @@ import { useTheme } from "tanstack-theme-kit"
 import type { JSX } from "react/jsx-runtime"
 import { Button } from "@heroui/react"
 import { cn } from "@/lib/utils"
+import clsx from "clsx"
 
 export type ThemesType = {
   mode: string
@@ -31,11 +32,16 @@ export default function ThemeSwitch({ className }: { className?: string }) {
 }
 
 function ThemeButton({ t }: { t: ThemesType }) {
-  const { setTheme } = useTheme()
+  const { setTheme, theme } = useTheme()
 
   return (
     <Button
-      className="h-6 w-6 rounded-full p-0"
+      className={clsx(
+        "size-6.5 rounded-full p-0",
+        t.mode === theme
+          ? "bg-accent"
+          : "bg-surface text-accent-foreground hover:bg-accent/50 dark:text-white"
+      )}
       isIconOnly
       onClick={() => setTheme(t.mode)}
     >

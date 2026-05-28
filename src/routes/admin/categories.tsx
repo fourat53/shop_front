@@ -1,11 +1,16 @@
-import { IconEdit, IconLoader2, IconTrash } from "@tabler/icons-react"
+import {
+  IconEdit,
+  IconLoader2,
+  IconSearch,
+  IconTrash,
+} from "@tabler/icons-react"
 import { createFileRoute } from "@tanstack/react-router"
 import { api, type Category } from "@/lib/api"
 import { useState, useEffect } from "react"
 import Input from "@/components/ui/input"
 import Select from "@/components/ui/select"
 import { Card, Button, Table, Modal, toast, IconPlus } from "@heroui/react"
-import { genders } from "../../../public/static"
+import { GENDERS } from "../../../data/static"
 
 export const Route = createFileRoute("/admin/categories")({
   component: CategoriesPage,
@@ -94,12 +99,13 @@ function CategoriesPage() {
       <Card className="h-full border border-border p-6">
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <Input
-            className="max-w-md"
+            icon={IconSearch}
+            className="w-full max-w-sm"
             placeholder="Search categories..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <Button onClick={() => openModal("create")}>
+          <Button className="font-semibold" onClick={() => openModal("create")}>
             <IconPlus />
             Add Category
           </Button>
@@ -112,7 +118,7 @@ function CategoriesPage() {
                 <Table.Column>ID</Table.Column>
                 <Table.Column>CATEGORY NAME</Table.Column>
                 <Table.Column>TARGET GENDER</Table.Column>
-                <Table.Column>ACTIONS</Table.Column>
+                <Table.Column className="pr-7 text-right">ACTIONS</Table.Column>
               </Table.Header>
               <Table.Body>
                 {categories.map((c) => (
@@ -133,9 +139,9 @@ function CategoriesPage() {
                     <Table.Cell>
                       <div className="flex items-center justify-end gap-2">
                         <Button
+                          variant="secondary"
                           isIconOnly
                           size="sm"
-                          variant="secondary"
                           onClick={() => openModal("edit", c)}
                         >
                           <IconEdit className="size-4 text-muted hover:text-foreground" />
@@ -174,7 +180,7 @@ function CategoriesPage() {
                   <div className="space-y-4">
                     <Input
                       label="Category Name"
-                      required
+                      isRequired
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                     />
@@ -182,7 +188,7 @@ function CategoriesPage() {
                       isRequired
                       label="Target Gender"
                       value={gender}
-                      items={genders}
+                      items={GENDERS}
                       onChange={(value) =>
                         setGender(value as Category["gender"])
                       }

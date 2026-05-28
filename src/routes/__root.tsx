@@ -3,7 +3,6 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import { TanStackDevtools } from "@tanstack/react-devtools"
 import { ThemeProvider } from "tanstack-theme-kit"
 import appCss from "../styles.css?url"
-import ThemeSwitch from "@/components/ThemeSwitch"
 import { Toast } from "@heroui/react"
 
 export const Route = createRootRoute({
@@ -55,7 +54,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             ]}
           />
           <Scripts />
-          <ThemeSwitch className="fixed right-6 bottom-6" />
         </ThemeProvider>
       </body>
     </html>
